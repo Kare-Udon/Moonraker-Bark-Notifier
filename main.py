@@ -1,9 +1,11 @@
 import json
+import re
 import time
 import requests
 import base64
 import hashlib
 import logging
+from urllib.parse import quote
 
 with open('settings.json', 'r') as file:
     settings = json.load(file)
@@ -79,13 +81,13 @@ class BarkingController:
             display_status = res.json()['result']['status']['display_status']
             progress = round(display_status['progress'] * 100, 2)
             state = print_stats['state']
-            project_name = print_stats['filename']
+            project_name = re.sub(r'.gcode', "", print_stats['filename'])
 
             if state == "printing":
                 self.is_printing = True
 
             if self.is_printing and self.start_of_print:
-                barking(f"Printing Started/Start listening to project {project_name}!?icon={bark['icon_url']}")
+                barking(f"Printing Started/Start listening to project {quote(project_name)}!?icon={bark['icon_url']}")
                 self.start_of_print = False
 
             if state == "complete":
@@ -96,12 +98,12 @@ class BarkingController:
                     b2 = B2Upload()
                     upload_file_name = b2.upload()
                     barking(
-                        f"Printing COMPLETED!/Project {project_name} is finished. Click"
+                        f"Printing COMPLETED!/Project {quote(project_name)} is finished. Click"
                         f" to see the photo.?level=timeSensitive&url={backblaze['url']}/{upload_file_name}"
                         f"&icon={bark['icon_url']}")
                 else:
                     barking(
-                        f"Printing COMPLETED!/Project {project_name} is finished.?level"
+                        f"Printing COMPLETED!/Project {quote(project_name)} is finished.?level"
                         f"=timeSensitive&icon={bark['url']}&icon={bark['icon_url']}")
                 self.is_printing = False
 
@@ -110,7 +112,7 @@ class BarkingController:
                     return
 
                 barking(
-                    f"Printing Paused!/Project {project_name} has been paused."
+                    f"Printing Paused!/Project {quote(project_name)} has been paused."
                     f"?icon={bark['icon_url']}")
                 self.is_printing = False
 
@@ -122,12 +124,12 @@ class BarkingController:
                     b2 = B2Upload()
                     upload_file_name = b2.upload()
                     barking(
-                        f"Printing ERROR!/Project {project_name} is failed. Hope next time is a success! Click"
+                        f"Printing ERROR!/Project {quote(project_name)} is failed. Hope next time is a success! Click"
                         f" to see the photo.?level=timeSensitive&icon={bark['icon_url']}"
                         f"&url={backblaze['url']}/{upload_file_name}")
                 else:
                     barking(
-                        f"Printing ERROR!/Project {project_name} is failed. Hope next time is a success!?level"
+                        f"Printing ERROR!/Project {quote(project_name)} is failed. Hope next time is a success!?level"
                         f"=timeSensitive&icon={bark['icon_url']}")
 
                 self.is_printing = False
@@ -146,12 +148,12 @@ class BarkingController:
                             b2 = B2Upload()
                             upload_file_name = b2.upload()
                             barking(
-                                f"Printing Status Notification/Project {project_name} is {progress}%25 done! Click to "
+                                f"Printing Status Notification/Project {quote(project_name)} is {progress}%25 done! Click to "
                                 f"see the photo.?url={backblaze['url']}/{upload_file_name}"
                                 f"&icon={bark['icon_url']}")
                         else:
                             barking(
-                                f"Printing Status Notification/Project {project_name} is {progress}%25 done!"
+                                f"Printing Status Notification/Project {quote(project_name)} is {progress}%25 done!"
                                 f"?icon={bark['icon_url']}")
 
 
