@@ -1,0 +1,13 @@
+[Unit]
+Description=Moonraker Bark Notifier
+After=multi-user.target
+
+[Service]
+Type=simple
+User=root
+Group=root
+WorkingDirectory=/usr/local/bin/Moonraker_Bark_Notifier
+ExecStart=/usr/bin/python3 /usr/local/bin/Moonraker_Bark_Notifier/main.py
+
+[Install]
+WantedBy=multi-user.target

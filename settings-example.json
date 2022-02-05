@@ -1,0 +1,28 @@
+{
+  "moonraker": {
+    "username": "YOUR_USERNAME",
+    "passwd": "YOUR_PASSWORD",
+    "url": "localhost",
+    "port": "7125"
+  },
+  "webcam": {
+    "has_camera": false,
+    "url": "http://localhost/webcam/?action=snapshot"
+  },
+  "bark": {
+    "url":  "https://api.day.app/YOUR_BARK_API_KEY",
+    "icon_url": "https://raw.githubusercontent.com/Lao-Liu233/LaoLiublog.github.io/master/images/avatar.png",
+    "max_retries": 3
+  },
+  "backblaze": {
+    "url": "https://f000.backblazeb2.com/file/YOUR_BUCKET_NAME/",
+    "keyID": "",
+    "applicationKey": "",
+    "bucketID": ""
+  },
+  "debug": {
+    "enable_logging": true
+  },
+  "notification_while_percentage": [25, 50, 75, 99],
+  "query_interval": 10
+}
